@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "056130bd-29e7-41b8-8cfc-e8fab9f57023",
+		"name": "SightSeeinAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9574048"
+	},
+	"item": [
+		{
+			"name": "ServerHello",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Successful communication\", function(){\r",
+							"    pm.expect(jsonResponse.message).to.eql(\"server hello\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddAttractionBadAuth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();\r",
+							"\r",
+							"var hasMessageProperty = jsonResponse.hasOwnProperty(\"message\");\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Error on auth error\", function(){\r",
+							"    pm.expect(hasMessageProperty).to.be.true;\r",
+							"    pm.expect(jsonResponse.message).to.eql(\"Auth error\");\r",
+							"\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"apikey\": \"thisisawrongapikey\",\r\n    \"shortName\": \"{{testUpload}}\",\r\n    \"city\":\"{{testUpload}}\",\r\n    \"description\": \"{{testUpload}}\",\r\n    \"country\": \"{{testUpload}}\",\r\n    \"type\": \"{{testUpload}}\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddAttractionGoodAuth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var jsonResponse = pm.response.json();\r",
+							"var hasMessageProperty = jsonResponse.hasOwnProperty(\"city\");\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Successfully added one attraction\", function(){\r",
+							"    pm.expect(jsonResponse.type).to.eql(environment[\"testUpload\"]);\r",
+							"    pm.environment.set(\"attractionid\", jsonResponse._id)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"apikey\": \"{{apiKey}}\",\r\n    \"shortName\": \"{{testUpload}}\",\r\n    \"city\":\"{{testUpload}}\",\r\n    \"description\": \"{{testUpload}}\",\r\n    \"country\": \"{{testUpload}}\",\r\n    \"type\": \"{{testUpload}}\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllAttractions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Has uploaded data\", function(){\r",
+							"    pm.expect(jsonResponse.length).to.be.above(0)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/all",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAttractionByIdBadId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test(\"Error on bad id\", function(){\r",
+							"    pm.expect(jsonResponse.message).to.eql(\"AUTH error\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/deleteById",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"deleteById"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAttractionByIdGoodId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonResponse = pm.response.json();\r",
+							"\r",
+							"var hasAcknowledgedProperty = jsonResponse.hasOwnProperty(\"acknowledged\");\r",
+							"var hasDeletedCountProperty = jsonResponse.hasOwnProperty(\"deletedCount\");\r",
+							"\r",
+							"pm.test(\"Deleted count\", function(){\r",
+							"    pm.expect(hasAcknowledgedProperty).to.be.true;\r",
+							"    pm.expect(hasDeletedCountProperty).to.be.true;\r",
+							"    pm.expect(jsonResponse.acknowledged).to.be.true;\r",
+							"    pm.expect(jsonResponse.deletedCount).to.eql(1);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"apikey\": \"{{apiKey}}\",\r\n    \"id\": \"{{attractionid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/deleteById",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"deleteById"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
