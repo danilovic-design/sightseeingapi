@@ -14,7 +14,7 @@ import bodyParser from "body-parser";
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT;
+const port = process.env.PORT || "8000";
 
 app.use(bodyParser.json());
 
@@ -70,6 +70,6 @@ mongoose
     });
   })
   .catch((err) => {
-    console.log("DATABASE ERROR ON YOUR SIDE!!!!");
+    console.log("DATABASE ERROR ON YOUR SIDE!");
     console.log(err);
   });
