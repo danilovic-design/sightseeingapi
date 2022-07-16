@@ -12,8 +12,8 @@ const getAllAttractions = async (req: Request, res: Response) => {
 };
 
 const addNewAttraction = async (req: Request, res: Response) => {
-  //if (process.env.APIKEY === sanitize(req.body.apikey)) {
-  if (true) {
+  if (process.env.APIKEY === sanitize(req.body.apikey)) {
+    //if (true) {
     try {
       let newAttraction = new Attraction();
       newAttraction.shortName = sanitize(req.body.shortName);
